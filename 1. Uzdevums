@@ -1,0 +1,11 @@
+$datorsNosaukums = $env:COMPUTERNAME
+$sistema = Get-CimInstance -ClassName Win32_OperatingSystem
+$versija = $PSVersionTable.PSVersion
+$datums = Get-Date
+$procesi = Get-Process
+Write-Output "Datora nosaukums: $datorsNosaukums"
+Write-Output "Operētājsistēma: $($sistema.Caption)"
+Write-Output "Būvējuma numurs: $($sistema.BuildNumber)"
+Write-Output "PowerShell versija: $versija"
+Write-Output "Datums un laiks: $datums"
+Write-Output "Procesu skaits: $($procesi.Count)"
