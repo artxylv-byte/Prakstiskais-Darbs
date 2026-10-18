@@ -1,0 +1,8 @@
+
+$visiDraiveri = Get-CimInstance -ClassName Win32_PnPSignedDriver
+$nevisMicrosoft = $visiDraiveri | Where-Object -FilterScript { $_.DriverProviderName -ne "Microsoft" -and $_.DriverProviderName -ne $null }
+$izvelets = $nevisMicrosoft | Select-Object -Property DeviceName, DriverProviderName, DriverVersion
+$izvelets | Export-Csv -Path ".\draiveri.csv" -NoTypeInformation -Encoding UTF8
+$rindas = Import-Csv -Path ".\draiveri.csv"
+Write-Output "Rindu skaits CSV failā: $($rindas.Count)"
+$izvelets | Format-Table -AutoSize
