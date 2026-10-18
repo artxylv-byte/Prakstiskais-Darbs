@@ -1,0 +1,5 @@
+
+$laiks1 = Measure-Command -Expression { Get-Service -Name Spooler | Out-Null }
+$laiks2 = Measure-Command -Expression { Get-CimInstance -ClassName Win32_Service -Filter "Name = 'Spooler'" | Out-Null }
+Write-Output "Get-Service: $($laiks1.TotalMilliseconds) ms"
+Write-Output "Get-CimInstance: $($laiks2.TotalMilliseconds) ms"
