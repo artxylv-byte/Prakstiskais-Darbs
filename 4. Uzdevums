@@ -1,13 +1,15 @@
 
-$sakums = (Get-Date).AddHours(-48)
-$ieraksti = @(Get-EventLog -LogName System -EntryType Error -After $sakums -ErrorAction SilentlyContinue)
-Write-Output "Kļūdu ierakstu skaits pēdējo 48 stundu laikā: $($ieraksti.Count)"
-if ($ieraksti.Count -gt 0) {
-    $grupas = $ieraksti | Group-Object -Property Source
-    $sakartotas = $grupas | Sort-Object -Property Count -Descending
-    $pirma = $sakartotas | Select-Object -First 1
-    Write-Output "Visbiežākais avots: $($pirma.Name), reizes: $($pirma.Count)"
+[CmdletBinding(SupportsShouldProcess)]
+param()
+$visiServisi = Get-Service
+$atrastie = @($visiServisi | Where-Object -FilterScript { $_.StartType -eq "Automatic" -and $_.Status -eq "Stopped" })
+if ($atrastie.Count -eq 0) {
+    Write-Output "Atrasto servisu skaits: 0"
 }
 else {
-    Write-Output "Kļūdu ierakstu nav, tāpēc visbiežākā avota nav."
+    Write-Output "Atrasto servisu skaits: $($atrastie.Count)"
+    foreach ($serviss in $atrastie) {
+        Write-Output "Palaiž servisu: $($serviss.Name)"
+        Start-Service -Name $serviss.Name
+    }
 }
