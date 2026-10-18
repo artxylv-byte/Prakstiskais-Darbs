@@ -1,0 +1,5 @@
+
+$adapteri = Get-NetAdapter
+$tabula = $adapteri | Select-Object -Property Name, Status, MacAddress, LinkSpeed
+$tabula | Export-Csv -Path ".\adapteri.csv" -NoTypeInformation -Encoding UTF8
+$tabula | Format-Table -AutoSize
