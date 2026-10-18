@@ -1,0 +1,24 @@
+
+$procesi = Get-Process
+$darbojas = 0
+$aptureti = 0
+foreach ($serviss in Get-Service) {
+    if ($serviss.Status -eq "Running") {
+        $darbojas = $darbojas + 1
+    }
+    if ($serviss.Status -eq "Stopped") {
+        $aptureti = $aptureti + 1
+    }
+}
+$sakums = (Get-Date).AddHours(-48)
+$ieraksti = @(Get-EventLog -LogName System -EntryType Error -After $sakums -ErrorAction SilentlyContinue)
+$brivaVieta = 0
+foreach ($disks in Get-CimInstance -ClassName Win32_LogicalDisk -Filter "DriveType = 3") {
+    $brivaVieta = $brivaVieta + $disks.FreeSpace
+}
+$brivaGB = [math]::Round($brivaVieta / 1GB, 2)
+Write-Output "Procesu skaits: $($procesi.Count)"
+Write-Output "Darbojošies servisi: $darbojas"
+Write-Output "Apturēti servisi: $aptureti"
+Write-Output "Kļūdu ieraksti pēdējo 48 stundu laikā: $($ieraksti.Count)"
+Write-Output "Kopējā brīvā vieta: $brivaGB GB"
