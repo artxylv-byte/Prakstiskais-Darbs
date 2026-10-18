@@ -1,0 +1,13 @@
+
+$sakums = (Get-Date).AddHours(-48)
+$ieraksti = @(Get-EventLog -LogName System -EntryType Error -After $sakums -ErrorAction SilentlyContinue)
+Write-Output "Kļūdu ierakstu skaits pēdējo 48 stundu laikā: $($ieraksti.Count)"
+if ($ieraksti.Count -gt 0) {
+    $grupas = $ieraksti | Group-Object -Property Source
+    $sakartotas = $grupas | Sort-Object -Property Count -Descending
+    $pirma = $sakartotas | Select-Object -First 1
+    Write-Output "Visbiežākais avots: $($pirma.Name), reizes: $($pirma.Count)"
+}
+else {
+    Write-Output "Kļūdu ierakstu nav, tāpēc visbiežākā avota nav."
+}
