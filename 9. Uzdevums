@@ -1,0 +1,2 @@
+
+Get-Process -IncludeUserName | Select-Object -Property ProcessName, Id, UserName
